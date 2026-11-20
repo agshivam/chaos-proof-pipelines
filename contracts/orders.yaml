@@ -1,0 +1,16 @@
+# Data contract for the daily orders file. It says what "good" looks like, so a bad file is rejected before it is loaded.
+name: orders
+owner: data-platform
+file_pattern: "orders_{date}.csv"
+columns:
+  order_id:    {type: string,    nullable: false, unique: true}
+  customer_id: {type: string,    nullable: false}
+  order_ts:    {type: timestamp, nullable: false}
+  amount:      {type: double,    nullable: false, min: 0, max: 100000}
+  currency:    {type: string,    nullable: false, allowed: [USD, EUR, GBP, INR]}
+  status:      {type: string,    nullable: false, allowed: [placed, shipped, delivered, cancelled]}
+volume:
+  expected_rows: 200        # typical rows per day
+  tolerance_pct: 40         # a day outside 200 +/- 40 percent is suspicious
+reconciliation:
+  amount_tolerance: 0.01    # the loaded sum of amount must match the source control total within one cent

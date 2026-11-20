@@ -1,0 +1,19 @@
+name: chaos-suite
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "30 2 * * *"   # daily, so a silent break in the pipeline shows up as a red badge
+jobs:
+  chaos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt pytest
+      - name: Unit tests
+        run: pytest -q tests --ignore=tests/test_dagster.py
+      - name: Inject every fault and confirm each one is caught
+        run: python scripts/run_chaos_suite.py
