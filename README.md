@@ -1,5 +1,7 @@
 # Chaos-proof pipelines
 
+**Live report:** https://app-patient-lakehouse.streamlit.app/
+
 Pipelines that survive bad data, late data and reruns. A generator breaks the source file on purpose, and the pipeline has to catch every break before anything bad is loaded. Everything uses synthetic orders data, so nothing is downloaded and no employer data is involved.
 
 **Result:** 9 of 9 injected faults are caught by the rule expected to catch them, and rerunning any day leaves zero duplicates (checked by the test suite and in CI).
